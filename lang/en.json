@@ -1,0 +1,11 @@
+{
+    "prefix": "{red}[SankySounds]{default} ",
+    "menu<title>": "Sanky Sounds",
+    "submenu<title>": "Avalible Sounds",
+    "submenu<sounds>": "Sounds",
+    "option<volume>": "Change Volume",
+
+    "no.permission": "You don't have permission to use sounds.",
+    "cooldown": "Sounds are on cooldown! Please wait {red}{0}{default} seconds and try again!",
+    "volume<selected>": "Your volume is now set to {red}{0}"
+}
