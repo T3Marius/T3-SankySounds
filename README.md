@@ -21,4 +21,4 @@ Sanky Sounds is a plugin made for Counter Strike 2 using [**CounterStrikesSharp*
  Just read what in-app says and you will get it.
 
 # Support
-If you want to support me for the work i do you can do this here [Revolut](revolut.me/dumitrqxrj) or [PayPal](https://www.paypal.com/paypalme/my/settings?flow=cmV0dXJuVXJsPWh0dHBzOi8vd3d3LnBheXBhbC5jb20vbXlhY2NvdW50L3RyYW5zZmVyL2hvbWVwYWdlL3JlcXVlc3QmY2FuY2VsVXJsPWh0dHBzOi8vd3d3LnBheXBhbC5jb20vbXlhY2NvdW50L3RyYW5zZmVyL2hvbWVwYWdlL3JlcXVlc3Q=)
+If you want to support me for the work i do you can do this here [Revolut](revolut.me/dumitrqxrj) or PayPal: ciucuvic@gmail.com
