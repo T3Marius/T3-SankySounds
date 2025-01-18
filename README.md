@@ -9,6 +9,7 @@ Sanky Sounds is a plugin made for Counter Strike 2 using [**CounterStrikesSharp*
 # How to add custom sounds?
  To add custom sounds you need to go in config:
 ```json
+
     "SayPrefixes": [ // the prefixes player needs to type sounds with.
       ".",
       "!"
