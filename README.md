@@ -47,7 +47,7 @@ Sanky Sounds is a plugin made for Counter Strike 2 using [**CounterStrikesSharp*
       100
     ],
     "DefaultVolume": 60,
-    "SoundsCooldown": 10,
+    "SoundsCooldown": 10, // person x use a sonud then person y can't use the sounds for x seconds
     "ShowSoundMessage": true // whether to show or not the message key in chat when playing the sound.
   },
   "SankySounds": {
