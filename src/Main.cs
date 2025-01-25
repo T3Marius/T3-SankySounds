@@ -13,7 +13,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
 {
     public override string ModuleAuthor => "T3Marius";
     public override string ModuleName => "T3-EntrySounds";
-    public override string ModuleVersion => "1.0";
+    public override string ModuleVersion => "1.1";
     public static Main Instance { get; set; } = new Main();
     public PluginConfig Config { get; set; } = new PluginConfig();
     public DateTime LastSoundTime = DateTime.MinValue;
@@ -44,6 +44,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
         if (player == null || !player.IsValid || player.IsBot)
             return HookResult.Continue;
 
+        // Check if the player has permission to use Sanky Sounds
         if (!HasPermission(player))
         {
             player.PrintToChat(Localizer["prefix"] + Localizer["no.permission"]);
@@ -60,6 +61,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
                 if (commandArgument.StartsWith(prefix))
                 {
                     string commandKey = commandArgument.Substring(prefix.Length).Trim();
+
                     if (Config.SankySounds.Sounds.Any(s => s.Key.Split(',').Select(k => k.Trim()).Contains(commandKey)))
                     {
                         double secondsSinceLastSound = (DateTime.Now - LastSoundTime).TotalSeconds;
@@ -70,6 +72,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
                             player.PrintToChat(Localizer["prefix"] + Localizer["cooldown", Math.Floor(remainingCooldown).ToString("0") + " seconds"]);
                             return HookResult.Continue;
                         }
+
                         foreach (var soundEntry in Config.SankySounds.Sounds)
                         {
                             var keys = soundEntry.Key.Split(',').Select(k => k.Trim());
@@ -87,9 +90,14 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
                                         LastSoundTime = DateTime.Now;
                                     }
                                 }
+
                                 return Config.Settings.ShowSoundMessage ? HookResult.Continue : HookResult.Handled;
                             }
                         }
+                    }
+                    else
+                    {
+                        return HookResult.Continue;
                     }
                 }
             }
