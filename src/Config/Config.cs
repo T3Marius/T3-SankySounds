@@ -1,4 +1,5 @@
 ﻿using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Menu;
 
 namespace T3EntrySounds;
 

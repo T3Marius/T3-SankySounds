@@ -5,6 +5,8 @@ using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Capabilities;
 using CounterStrikeSharp.API.Modules.Admin;
 using CounterStrikeSharp.API.Modules.Commands;
+using CounterStrikeSharp.API.Modules.Entities;
+using CounterStrikeSharp.API.Modules.Menu;
 using T3MenuSharedApi;
 
 namespace T3EntrySounds;
@@ -13,7 +15,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
 {
     public override string ModuleAuthor => "T3Marius";
     public override string ModuleName => "T3-EntrySounds";
-    public override string ModuleVersion => "1.1";
+    public override string ModuleVersion => "1.2";
     public static Main Instance { get; set; } = new Main();
     public PluginConfig Config { get; set; } = new PluginConfig();
     public DateTime LastSoundTime = DateTime.MinValue;
@@ -44,16 +46,8 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
         if (player == null || !player.IsValid || player.IsBot)
             return HookResult.Continue;
 
-        // Check if the player has permission to use Sanky Sounds
-        if (!HasPermission(player))
-        {
-            player.PrintToChat(Localizer["prefix"] + Localizer["no.permission"]);
-            return HookResult.Continue;
-        }
-
         string commandArgument = info.ArgByIndex(1);
         List<string> prefixes = Config.Settings.SayPrefixes;
-
         if (commandArgument != null)
         {
             foreach (var prefix in prefixes)
@@ -64,6 +58,12 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
 
                     if (Config.SankySounds.Sounds.Any(s => s.Key.Split(',').Select(k => k.Trim()).Contains(commandKey)))
                     {
+                        if (!Config.Permission.Permissions.Any(permission => CheckPermissionOrSteamID(player, permission)))
+                        {
+                            player.PrintToChat(Localizer["prefix"] + Localizer["no.premission"]);
+                            return HookResult.Continue;
+                        }
+
                         double secondsSinceLastSound = (DateTime.Now - LastSoundTime).TotalSeconds;
                         double remainingCooldown = Config.Settings.SoundsCooldown - secondsSinceLastSound;
 
@@ -144,26 +144,28 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
         });
         manager.OpenMainMenu(player, menu);
     }
-    public bool HasPermission(CCSPlayerController player)
+    private static bool CheckPermissionOrSteamID(CCSPlayerController player, string key)
     {
-        var permissions = Config.Permission.Permissions;
-
-        foreach (var perm in permissions)
+        if (key.StartsWith('#'))
         {
-            if (perm.StartsWith("#") && AdminManager.PlayerInGroup(player, perm.Substring(1)))
-            {
-                return true;
-            }
-            else if (perm.StartsWith("@") && AdminManager.PlayerHasPermissions(player, perm.Substring(1)))
-            {
-                return true;
-            }
-            else if (perm.Equals(player.SteamID.ToString()))
+            return AdminManager.PlayerInGroup(player, key);
+        }
+
+        AdminData? adminData = AdminManager.GetPlayerAdminData(player);
+        if (adminData != null)
+        {
+            string permissionKey = key.StartsWith('@') ? key : "@" + key;
+            if (adminData.Flags.Any(flagEntry =>
+                flagEntry.Value.Contains(permissionKey, StringComparer.OrdinalIgnoreCase) ||
+                flagEntry.Value.Any(flag => permissionKey.StartsWith(flag, StringComparison.OrdinalIgnoreCase))))
             {
                 return true;
             }
         }
-        return false;
+
+        return SteamID.TryParse(key, out SteamID? keySteamID) &&
+               keySteamID != null &&
+               Equals(keySteamID, new SteamID(player.SteamID));
     }
 
 }
