@@ -15,7 +15,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
 {
     public override string ModuleAuthor => "T3Marius";
     public override string ModuleName => "T3-EntrySounds";
-    public override string ModuleVersion => "1.2";
+    public override string ModuleVersion => "1.3";
     public static Main Instance { get; set; } = new Main();
     public PluginConfig Config { get; set; } = new PluginConfig();
     public DateTime LastSoundTime = DateTime.MinValue;
@@ -60,7 +60,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
                     {
                         if (!Config.Permission.Permissions.Any(permission => CheckPermissionOrSteamID(player, permission)))
                         {
-                            player.PrintToChat(Localizer["prefix"] + Localizer["no.premission"]);
+                            player.PrintToChat(Localizer["prefix"] + Localizer["no.permissio"]);
                             return HookResult.Continue;
                         }
 
@@ -138,7 +138,7 @@ public class Main : BasePlugin, IPluginConfig<PluginConfig>
             {
                 string firstKey = key.Key.Split(',').First().Trim();
 
-                soundMenu.AddTextOption(firstKey);
+                soundMenu.AddTextOption(firstKey, selectable: true);
             }
             manager.OpenSubMenu(p, soundMenu);
         });
